@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="config" default="$(find roombot)/config/create2_params.yaml" />
+
+  <node name="ca_driver" pkg="ca_driver" type="ca_driver" output="screen">
+    <rosparam command="load" file="$(arg config)" />
+    <param name="robot_model" value="CREATE_2" />
+  </node>
+</launch>

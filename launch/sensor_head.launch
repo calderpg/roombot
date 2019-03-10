@@ -1,0 +1,31 @@
+<launch>
+  <arg name="output" default="screen"/>
+  <arg name="lidar_port" default="/dev/ttyUSB0"/>
+  <arg name="lidar_rotation_speed" default="5"/>
+  <arg name="lidar_sample_rate" default="500"/>
+  <!-- Front-facing camera -->
+  <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+    <arg name="camera" value="front_realsense"/>
+    <arg name="serial_no" value="746612070054"/>
+  </include>
+  <!-- Rear-facing camera -->
+  <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+    <arg name="camera" value="rear_realsense"/>
+    <arg name="serial_no" value="746612070384"/>
+  </include>
+  <!-- Spinning LIDAR -->
+  <node pkg="scanse_sweep" type="sweep_node" name="lidar_driver" output="$(arg output)">
+    <param name="serial_port" type="string" value="$(arg lidar_port)"/>
+    <param name="rotation_speed" type="int" value="$(arg lidar_rotation_speed)"/>
+    <param name="sample_rate" type="int" value="$(arg lidar_sample_rate)"/>
+    <param name="scan_topic" type="string" value="lidar_cloud"/>
+    <param name="frame_id" type="string" value="lidar_link"/>
+  </node>
+  <!-- Static transforms from sensor head to sensors -->
+  <node pkg="tf" type="static_transform_publisher" name="front_camera_link"
+        args="0.04 0 0 0 0 0 /sensor_head /front_realsense_link 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_camera_link"
+        args="-0.04 0 0 3.14159265359 0 0 /sensor_head /rear_realsense_link 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="lidar_link"
+        args="0 0 0.04 -1.57079633 0 0 /sensor_head /lidar_link 100"/>
+</launch>

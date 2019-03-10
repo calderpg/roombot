@@ -1,0 +1,3 @@
+Create cable: /dev/serial/by-id/usb-FTDI_FT231X_USB_UART_DN026FBB-if00-port0
+
+Scanse sweep: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DM00LO8J-if00-port0
